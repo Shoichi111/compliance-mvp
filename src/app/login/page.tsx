@@ -24,7 +24,26 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // Authenticate user with Firebase Auth
+      // TEMPORARY: Demo login without Firebase for testing
+      if (email === "admin@demo.com" && password === "demo123") {
+        toast.success("Welcome, Admin!");
+        router.push("/admin");
+        return;
+      }
+      
+      if (email === "alice@advisor.com" && password === "demo123") {
+        toast.success("Welcome, Advisor!");
+        router.push("/advisor");
+        return;
+      }
+      
+      if (email === "apex@construction.com" && password === "demo123") {
+        toast.success("Welcome, Subcontractor!");
+        router.push("/subcontractor");
+        return;
+      }
+
+      // If not demo credentials, try Firebase
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
