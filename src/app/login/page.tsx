@@ -73,12 +73,12 @@ export default function LoginPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '2rem 1rem',
+        padding: '1rem',
         background: 'linear-gradient(135deg, #f1f5f9 0%, #dbeafe 50%, #f1f5f9 100%)',
         boxSizing: 'border-box'
       }}
     >
-      <div style={{ width: '100%', maxWidth: '28rem' }}>
+      <div style={{ width: '100%', maxWidth: '600px' }}>
         <Card 
           style={{
             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
@@ -89,7 +89,7 @@ export default function LoginPage() {
           }}
         >
         <CardHeader 
-          className="space-y-4 p-8"
+          className="space-y-6 p-12"
           style={{
             background: 'linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%)',
             color: 'white'
@@ -119,17 +119,17 @@ export default function LoginPage() {
               </svg>
             </div>
           </div>
-          <CardTitle className="text-3xl font-bold text-center text-white">
+          <CardTitle className="text-4xl font-bold text-center text-white">
             Safety Compliance
           </CardTitle>
-          <CardDescription className="text-center text-lg" style={{ color: '#dbeafe' }}>
+          <CardDescription className="text-center text-xl" style={{ color: '#dbeafe' }}>
             Construction Management Platform
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-8">
-          <form onSubmit={handleLogin} className="space-y-6">
+        <CardContent className="p-12">
+          <form onSubmit={handleLogin} className="space-y-8">
             <div className="space-y-3">
-              <Label htmlFor="email" style={{ color: '#334155', fontWeight: '500' }}>Email Address</Label>
+              <Label htmlFor="email" style={{ color: '#334155', fontWeight: '500', fontSize: '1.1rem' }}>Email Address</Label>
               <Input
                 id="email"
                 type="email"
@@ -139,11 +139,11 @@ export default function LoginPage() {
                 required
                 disabled={isLoading}
                 style={{
-                  height: '3rem',
-                  padding: '0 1rem',
+                  height: '3.5rem',
+                  padding: '0 1.5rem',
                   border: '1px solid #cbd5e1',
                   borderRadius: '0.5rem',
-                  fontSize: '1rem',
+                  fontSize: '1.1rem',
                   transition: 'all 0.2s ease'
                 }}
                 onFocus={(e) => {
@@ -157,7 +157,7 @@ export default function LoginPage() {
               />
             </div>
             <div className="space-y-3">
-              <Label htmlFor="password" style={{ color: '#334155', fontWeight: '500' }}>Password</Label>
+              <Label htmlFor="password" style={{ color: '#334155', fontWeight: '500', fontSize: '1.1rem' }}>Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -167,11 +167,11 @@ export default function LoginPage() {
                 required
                 disabled={isLoading}
                 style={{
-                  height: '3rem',
-                  padding: '0 1rem',
+                  height: '3.5rem',
+                  padding: '0 1.5rem',
                   border: '1px solid #cbd5e1',
                   borderRadius: '0.5rem',
-                  fontSize: '1rem',
+                  fontSize: '1.1rem',
                   transition: 'all 0.2s ease'
                 }}
                 onFocus={(e) => {
@@ -189,10 +189,10 @@ export default function LoginPage() {
               className="w-full text-white font-semibold transition-all duration-200" 
               disabled={isLoading}
               style={{
-                height: '3rem',
+                height: '3.5rem',
                 backgroundColor: '#1e40af',
                 borderRadius: '0.5rem',
-                fontSize: '1rem',
+                fontSize: '1.1rem',
                 boxShadow: '0 4px 14px 0 rgba(30, 64, 175, 0.4)',
                 border: 'none'
               }}
