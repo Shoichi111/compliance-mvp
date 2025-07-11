@@ -290,7 +290,7 @@ export default function LoginPage() {
               </button>
             </form>
           
-            {/* Demo Credentials Section */}
+            {/* Skip Login - Direct Navigation */}
             <div 
               style={{
                 paddingTop: '32px',
@@ -300,69 +300,98 @@ export default function LoginPage() {
             >
               <h3 
                 style={{
-                  fontSize: '14px',
+                  fontSize: '16px',
                   fontWeight: '600',
                   color: '#374151',
                   marginBottom: '16px',
-                  display: 'flex',
-                  alignItems: 'center'
+                  textAlign: 'center'
                 }}
               >
-                <svg 
-                  style={{ 
-                    width: '16px', 
-                    height: '16px', 
-                    marginRight: '8px',
-                    color: '#6366f1'
-                  }} 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Demo Credentials
+                🚀 Skip Login - Direct Access
               </h3>
               
-              <div 
-                style={{
-                  backgroundColor: '#f9fafb',
-                  borderRadius: '8px',
-                  padding: '20px'
-                }}
-              >
-                <div style={{ marginBottom: '12px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '14px', color: '#6b7280' }}>Admin:</span>
-                    <span style={{ fontSize: '14px', fontFamily: 'monospace', color: '#1f2937' }}>admin@demo.com</span>
-                  </div>
-                </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <a 
+                  href="/admin"
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    padding: '12px 16px',
+                    backgroundColor: '#dc2626',
+                    color: 'white',
+                    textDecoration: 'none',
+                    borderRadius: '8px',
+                    fontWeight: '500',
+                    textAlign: 'center',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#b91c1c';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#dc2626';
+                  }}
+                >
+                  🔴 Admin Dashboard
+                </a>
                 
-                <div style={{ marginBottom: '12px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '14px', color: '#6b7280' }}>Advisor:</span>
-                    <span style={{ fontSize: '14px', fontFamily: 'monospace', color: '#1f2937' }}>alice@advisor.com</span>
-                  </div>
-                </div>
+                <a 
+                  href="/advisor"
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    padding: '12px 16px',
+                    backgroundColor: '#2563eb',
+                    color: 'white',
+                    textDecoration: 'none',
+                    borderRadius: '8px',
+                    fontWeight: '500',
+                    textAlign: 'center',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#1d4ed8';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#2563eb';
+                  }}
+                >
+                  🔵 Advisor Dashboard
+                </a>
                 
-                <div style={{ marginBottom: '16px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '14px', color: '#6b7280' }}>Subcontractor:</span>
-                    <span style={{ fontSize: '14px', fontFamily: 'monospace', color: '#1f2937' }}>apex@construction.com</span>
-                  </div>
-                </div>
-                
-                <p style={{ 
-                  fontSize: '12px', 
-                  color: '#9ca3af', 
-                  textAlign: 'center',
-                  margin: '0',
-                  paddingTop: '12px',
-                  borderTop: '1px solid #e5e7eb'
-                }}>
-                  All demo passwords: Use the password provided during setup
-                </p>
+                <a 
+                  href="/subcontractor"
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    padding: '12px 16px',
+                    backgroundColor: '#16a34a',
+                    color: 'white',
+                    textDecoration: 'none',
+                    borderRadius: '8px',
+                    fontWeight: '500',
+                    textAlign: 'center',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#15803d';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#16a34a';
+                  }}
+                >
+                  🟢 Subcontractor Portal
+                </a>
               </div>
+              
+              <p style={{ 
+                fontSize: '12px', 
+                color: '#9ca3af', 
+                textAlign: 'center',
+                margin: '16px 0 0 0'
+              }}>
+                Click any button above to skip login and go directly to the dashboard
+              </p>
             </div>
           </CardContent>
         </Card>
