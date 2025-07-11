@@ -11,38 +11,32 @@ interface MetricCardProps {
   iconColor?: 'primary' | 'success' | 'warning' | 'error';
 }
 
-export function MetricCard({ 
-  label, 
-  value, 
-  icon, 
-  trend, 
-  iconColor = 'primary' 
-}: MetricCardProps) {
+export function MetricCard({ label, value, icon, trend, iconColor = 'primary' }: MetricCardProps) {
   const iconColors = {
-    primary: 'bg-indigo-100 text-indigo-600',
-    success: 'bg-green-100 text-green-600',
-    warning: 'bg-orange-100 text-orange-600',
-    error: 'bg-red-100 text-red-600'
+    primary: 'bg-indigo-50 text-indigo-600',
+    success: 'bg-emerald-50 text-emerald-600',
+    warning: 'bg-amber-50 text-amber-600',
+    error: 'bg-rose-50 text-rose-600'
   };
 
   return (
-    <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
+    <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5">
       <div className="flex items-start justify-between mb-4">
-        <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${iconColors[iconColor]}`}>
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${iconColors[iconColor]}`}>
           {icon}
         </div>
         {trend && (
-          <span className={`text-xs font-semibold px-2 py-1 rounded ${
+          <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
             trend.isPositive 
-              ? 'bg-green-100 text-green-800' 
-              : 'bg-red-100 text-red-800'
+              ? 'bg-emerald-50 text-emerald-700' 
+              : 'bg-rose-50 text-rose-700'
           }`}>
             {trend.value}
           </span>
         )}
       </div>
-      <p className="text-sm text-gray-600 mb-1">{label}</p>
-      <p className="text-3xl font-bold text-gray-900">{value}</p>
+      <p className="text-sm font-medium text-gray-600 mb-1">{label}</p>
+      <p className="text-2xl font-bold text-gray-900">{value}</p>
     </div>
   );
 }

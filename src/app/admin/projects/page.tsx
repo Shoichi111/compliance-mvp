@@ -12,6 +12,9 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { Card } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { toast } from "sonner";
 import { Loader2, Plus, Building2 } from "lucide-react";
 
@@ -146,7 +149,7 @@ export default function ProjectManagement() {
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
+    <>
       <PageHeader
         title="Project Management"
         subtitle="Create projects and assign advisors and subcontractors"
@@ -159,70 +162,59 @@ export default function ProjectManagement() {
         </TabsList>
 
         <TabsContent value="projects">
-          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-            <h3 className="text-lg font-semibold mb-4">Active Projects</h3>
+          <Card noPadding>
             {loading ? (
-              <div className="text-center py-12 text-gray-500">
-                <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-4 text-gray-400">
-                  <Loader2 className="h-8 w-8 animate-spin" />
-                </div>
-                <p>Loading projects...</p>
-              </div>
+              <LoadingSpinner />
             ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="bg-gray-50">
-                      <TableHead className="font-semibold text-gray-700 py-4">Project Name</TableHead>
-                      <TableHead className="font-semibold text-gray-700">Assigned Advisor</TableHead>
-                      <TableHead className="font-semibold text-gray-700">Subcontractors</TableHead>
-                      <TableHead className="font-semibold text-gray-700">Created</TableHead>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Project Name</TableHead>
+                    <TableHead>Assigned Advisor</TableHead>
+                    <TableHead>Subcontractors</TableHead>
+                    <TableHead>Created</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {projects.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={4}>
+                        <EmptyState
+                          icon={<Building2 className="w-8 h-8 text-gray-400" />}
+                          title="No projects found"
+                          description="Create your first project in the Create Project tab"
+                        />
+                      </TableCell>
                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {projects.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={4}>
-                          <div className="text-center py-12 text-gray-500">
-                            <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-4 text-gray-400">
-                              <Building2 className="h-8 w-8" />
-                            </div>
-                            <p>No projects found</p>
-                            <p className="text-sm mt-2">Create your first project in the Create Project tab</p>
+                  ) : (
+                    projects.map((project) => (
+                      <TableRow key={project.id}>
+                        <TableCell className="font-medium">{project.projectName}</TableCell>
+                        <TableCell>{project.assignedAdvisorEmail || "Unassigned"}</TableCell>
+                        <TableCell>
+                          <div className="flex flex-wrap gap-1">
+                            {project.subcontractorEmails?.map((email, index) => (
+                              <span key={index} className="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                {email}
+                              </span>
+                            )) || <span className="text-gray-500">None assigned</span>}
                           </div>
                         </TableCell>
+                        <TableCell className="text-gray-500">
+                          {project.createdAt?.toDate?.()?.toLocaleDateString() || "N/A"}
+                        </TableCell>
                       </TableRow>
-                    ) : (
-                      projects.map((project) => (
-                        <TableRow key={project.id} className="hover:bg-gray-50 transition-colors">
-                          <TableCell className="font-medium text-gray-800 py-4">{project.projectName}</TableCell>
-                          <TableCell className="text-gray-600">{project.assignedAdvisorEmail || "Unassigned"}</TableCell>
-                          <TableCell>
-                            <div className="flex flex-wrap gap-1">
-                              {project.subcontractorEmails?.map((email, index) => (
-                                <span key={index} className="text-xs font-semibold px-2 py-1 rounded bg-blue-100 text-blue-800">
-                                  {email}
-                                </span>
-                              )) || <span className="text-gray-500">None assigned</span>}
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-gray-500">
-                            {project.createdAt?.toDate?.()?.toLocaleDateString() || "N/A"}
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
             )}
-            </div>
-          </div>
+          </Card>
         </TabsContent>
 
         <TabsContent value="create">
-          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-            <h3 className="text-lg font-semibold mb-4">Create New Project</h3>
+          <Card>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Create New Project</h3>
               <form onSubmit={handleCreateProject} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="projectName">Project Name</Label>
@@ -296,14 +288,10 @@ export default function ProjectManagement() {
                   )}
                 </div>
 
-                <button 
+                <Button 
                   type="submit" 
                   disabled={creating || !newProject.projectName || !newProject.assignedAdvisorId}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 inline-flex items-center gap-2 ${
-                    creating || !newProject.projectName || !newProject.assignedAdvisorId
-                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-                      : 'bg-indigo-600 text-white hover:bg-indigo-700 hover:shadow-md'
-                  }`}
+                  variant="primary"
                 >
                   {creating ? (
                     <>
@@ -316,12 +304,12 @@ export default function ProjectManagement() {
                       Create Project
                     </>
                   )}
-                </button>
+                </Button>
               </form>
 
-          </div>
+          </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </>
   );
 }

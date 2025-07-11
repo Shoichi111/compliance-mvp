@@ -6,6 +6,9 @@ import { db } from "@/lib/firebase";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { StatusCard } from "@/components/ui/StatusCard";
+import { Card } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { 
   Building2, 
   Users, 
@@ -102,63 +105,59 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
+    <>
       <PageHeader 
         title="Admin Dashboard"
         subtitle="Monitor compliance across all projects and manage system users"
       />
 
-      {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {metrics.map((metric) => (
-          <MetricCard key={metric.label} {...metric} />
-        ))}
-      </div>
+      <div className="grid gap-6">
+        {/* Metrics Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {metrics.map((metric) => (
+            <MetricCard key={metric.label} {...metric} />
+          ))}
+        </div>
 
-      {/* Status Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <StatusCard title="Compliance Status">
-          <StatusCard.Item
-            label="On Track"
-            value={`${stats.totalProjects - stats.overdue} Projects`}
-            variant="success"
-            icon={<CheckCircle className="w-3 h-3" />}
-          />
-          <StatusCard.Item
-            label="At Risk"
-            value={`${stats.overdue} Projects`}
-            variant="warning"
-            icon={<AlertCircle className="w-3 h-3" />}
-          />
-          <StatusCard.Item
-            label="Completion Rate"
-            value={`${stats.totalProjects > 0 
-              ? Math.round(((stats.totalProjects - stats.overdue) / stats.totalProjects) * 100)
-              : 0}%`}
-            variant="info"
-            icon={<TrendingUp className="w-3 h-3" />}
-          />
-        </StatusCard>
+        {/* Status Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <StatusCard title="Compliance Status">
+            <StatusCard.Item
+              label="On Track"
+              value={`${stats.totalProjects - stats.overdue} Projects`}
+              variant="success"
+              icon={<CheckCircle className="w-3 h-3" />}
+            />
+            <StatusCard.Item
+              label="At Risk"
+              value={`${stats.overdue} Projects`}
+              variant="warning"
+              icon={<AlertCircle className="w-3 h-3" />}
+            />
+            <StatusCard.Item
+              label="Completion Rate"
+              value={`${stats.totalProjects > 0 
+                ? Math.round(((stats.totalProjects - stats.overdue) / stats.totalProjects) * 100)
+                : 0}%`}
+              variant="info"
+              icon={<TrendingUp className="w-3 h-3" />}
+            />
+          </StatusCard>
 
-        <StatusCard title="Recent Activity">
-          {stats.loading ? (
-            <div className="empty-state">
-              <div className="empty-icon">
-                <BarChart3 className="w-8 h-8" />
-              </div>
-              <p>Loading...</p>
-            </div>
-          ) : (
-            <div className="empty-state">
-              <div className="empty-icon">
-                <BarChart3 className="w-8 h-8" />
-              </div>
-              <p>No recent activity</p>
-              <p className="text-sm mt-2">Users and submissions will appear here</p>
-            </div>
-          )}
-        </StatusCard>
+          <Card>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+            {stats.loading ? (
+              <LoadingSpinner />
+            ) : (
+              <EmptyState
+                icon={<BarChart3 className="w-8 h-8 text-gray-400" />}
+                title="No recent activity"
+                description="Users and submissions will appear here"
+              />
+            )}
+          </Card>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

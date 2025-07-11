@@ -12,6 +12,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { Card } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { toast } from "sonner";
 import { Loader2, Plus, User } from "lucide-react";
 
@@ -128,7 +131,7 @@ export default function UserManagement() {
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
+    <>
       <PageHeader
         title="User Management"
         subtitle="Create and manage advisors and subcontractors"
@@ -141,68 +144,61 @@ export default function UserManagement() {
         </TabsList>
 
         <TabsContent value="users">
-          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-            <h3 className="text-lg font-semibold mb-4">Registered Users</h3>
+          <Card noPadding>
             {loading ? (
-              <div className="text-center py-12 text-gray-500">
-                <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-4 text-gray-400">
-                  <Loader2 className="h-8 w-8 animate-spin" />
-                </div>
-                <p>Loading users...</p>
-              </div>
+              <LoadingSpinner />
             ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="bg-gray-50">
-                      <TableHead className="font-semibold text-gray-700 py-4">Email</TableHead>
-                      <TableHead className="font-semibold text-gray-700">Role</TableHead>
-                      <TableHead className="font-semibold text-gray-700">Company</TableHead>
-                      <TableHead className="font-semibold text-gray-700">Status</TableHead>
-                      <TableHead className="font-semibold text-gray-700">Created</TableHead>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Role</TableHead>
+                    <TableHead>Company</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Created</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {users.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={5}>
+                        <EmptyState
+                          icon={<User className="w-8 h-8 text-gray-400" />}
+                          title="No users found"
+                          description="Create your first user in the Create User tab"
+                        />
+                      </TableCell>
                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {users.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={5}>
-                          <div className="text-center py-12 text-gray-500">
-                            <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-4 text-gray-400">
-                              <User className="h-8 w-8" />
-                            </div>
-                            <p>No users found</p>
-                            <p className="text-sm mt-2">Create your first user in the Create User tab</p>
-                          </div>
+                  ) : (
+                    users.map((user) => (
+                      <TableRow key={user.id}>
+                        <TableCell className="font-medium">{user.email}</TableCell>
+                        <TableCell>{getRoleBadge(user.role)}</TableCell>
+                        <TableCell>{user.companyName || "-"}</TableCell>
+                        <TableCell>
+                          <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
+                            user.status === "active" 
+                              ? "bg-emerald-100 text-emerald-800" 
+                              : "bg-blue-100 text-blue-800"
+                          }`}>
+                            {user.status}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-gray-500">
+                          {user.createdAt?.toDate?.()?.toLocaleDateString() || "N/A"}
                         </TableCell>
                       </TableRow>
-                    ) : (
-                      users.map((user) => (
-                        <TableRow key={user.id} className="hover:bg-gray-50 transition-colors">
-                          <TableCell className="font-medium text-gray-800 py-4">{user.email}</TableCell>
-                          <TableCell>{getRoleBadge(user.role)}</TableCell>
-                          <TableCell className="text-gray-600">{user.companyName || "-"}</TableCell>
-                          <TableCell>
-                            <span className={`text-xs font-semibold px-2 py-1 rounded ${user.status === "active" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"}`}>
-                              {user.status}
-                            </span>
-                          </TableCell>
-                          <TableCell className="text-gray-500">
-                            {user.createdAt?.toDate?.()?.toLocaleDateString() || "N/A"}
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
             )}
-            </div>
-          </div>
+          </Card>
         </TabsContent>
 
         <TabsContent value="create">
-          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-            <h3 className="text-lg font-semibold mb-4">Create New User</h3>
+          <Card>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Create New User</h3>
               <form onSubmit={handleCreateUser} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
@@ -264,14 +260,10 @@ export default function UserManagement() {
                   )}
                 </div>
 
-                <button 
+                <Button 
                   type="submit" 
                   disabled={creating || !newUser.role}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 inline-flex items-center gap-2 ${
-                    creating || !newUser.role 
-                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-                      : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-md'
-                  }`}
+                  variant="primary"
                 >
                   {creating ? (
                     <>
@@ -284,12 +276,12 @@ export default function UserManagement() {
                       Create {newUser.role || "User"}
                     </>
                   )}
-                </button>
+                </Button>
               </form>
 
-          </div>
+          </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </>
   );
 }

@@ -106,7 +106,7 @@ export default function AdminLayout({
               const Icon = item.icon;
               const isActive = pathname === item.href;
               return (
-                
+                <a
                   key={item.name}
                   href={item.href}
                   onClick={() => setSidebarOpen(false)}
