@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { 
   Building2, 
@@ -12,7 +11,8 @@ import {
   BarChart3, 
   LogOut,
   Menu,
-  X
+  X,
+  Shield
 } from "lucide-react";
 
 export default function AdminLayout({
@@ -22,8 +22,8 @@ export default function AdminLayout({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
-  // Handle admin logout
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -48,90 +48,104 @@ export default function AdminLayout({
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-                <Building2 className="w-5 h-5 text-white" />
+              <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-sm">
+                <Shield className="w-5 h-5 text-white" />
               </div>
-              <span className="text-lg font-semibold">Safety Compliance</span>
+              <div>
+                <h1 className="text-lg font-semibold text-gray-900">Safety Compliance</h1>
+                <p className="text-xs text-gray-500 hidden sm:block">Admin Portal</p>
+              </div>
             </div>
+            
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center gap-1">
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </button>
+            </nav>
+
+            {/* Mobile menu button */}
             <button
-              className="lg:hidden btn btn-secondary p-2"
+              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
               onClick={() => setSidebarOpen(!sidebarOpen)}
             >
-              <Menu className="h-5 w-5" />
+              {sidebarOpen ? (
+                <X className="h-5 w-5 text-gray-600" />
+              ) : (
+                <Menu className="h-5 w-5 text-gray-600" />
+              )}
             </button>
           </div>
         </div>
       </header>
 
       <div className="flex h-[calc(100vh-4rem)]">
-        {/* Mobile sidebar overlay */}
+        {/* Mobile sidebar backdrop */}
         {sidebarOpen && (
           <div 
-            className="fixed inset-0 z-40 lg:hidden"
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
             onClick={() => setSidebarOpen(false)}
-          >
-            <div className="absolute inset-0 bg-black opacity-50"></div>
-          </div>
+          />
         )}
 
         {/* Sidebar */}
-        <aside 
-          className={`fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 bg-white border-r border-gray-200 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
-          style={{ top: '4rem' }}
-        >
-          {/* Sidebar Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
-                <Building2 className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <h2 className="text-lg font-bold text-gray-900">Admin Portal</h2>
-                <p className="text-xs text-gray-600">Safety Compliance</p>
-              </div>
-            </div>
-            <button
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              onClick={() => setSidebarOpen(false)}
-            >
-              <X className="h-4 w-4 text-gray-600" />
-            </button>
-          </div>
-
+        <aside className={`
+          fixed lg:static inset-y-0 left-0 z-50 w-64 
+          transform transition-transform duration-300 ease-in-out
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0
+          bg-white border-r border-gray-200 flex flex-col
+          top-16 h-[calc(100vh-4rem)]
+        `}>
           {/* Navigation */}
-          <nav className="p-4 space-y-1">
+          <nav className="flex-1 p-4 space-y-1">
             {navigation.map((item) => {
               const Icon = item.icon;
-              const isActive = typeof window !== 'undefined' && window.location.pathname === item.href;
+              const isActive = pathname === item.href;
               return (
-                <a
+                
                   key={item.name}
                   href={item.href}
-                  className={`nav-item ${isActive ? 'active' : ''}`}
                   onClick={() => setSidebarOpen(false)}
+                  className={`
+                    flex items-center gap-3 px-4 py-2.5 rounded-lg
+                    font-medium text-sm transition-all duration-200
+                    ${isActive 
+                      ? 'bg-indigo-50 text-indigo-600 shadow-sm' 
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                    }
+                  `}
                 >
-                  <Icon className="w-5 h-5" />
-                  {item.name}
+                  <Icon className={`w-5 h-5 ${isActive ? 'text-indigo-600' : ''}`} />
+                  <span>{item.name}</span>
+                  {isActive && (
+                    <div className="ml-auto w-1.5 h-1.5 bg-indigo-600 rounded-full" />
+                  )}
                 </a>
               );
             })}
           </nav>
 
-          {/* Sidebar Footer */}
-          <div className="p-4 border-t border-gray-200 mt-auto">
+          {/* Sidebar Footer - Mobile only */}
+          <div className="lg:hidden p-4 border-t border-gray-200">
             <button
-              className="btn btn-secondary w-full justify-start"
               onClick={handleLogout}
+              className="flex items-center gap-3 w-full px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-200"
             >
-              <LogOut className="mr-2 h-4 w-4" />
+              <LogOut className="w-4 h-4" />
               Logout
             </button>
           </div>
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto">
-          {children}
+        <main className="flex-1 overflow-y-auto bg-gray-50">
+          <div className="p-6 lg:p-8">
+            {children}
+          </div>
         </main>
       </div>
     </div>

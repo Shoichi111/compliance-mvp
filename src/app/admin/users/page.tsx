@@ -141,11 +141,11 @@ export default function UserManagement() {
         </TabsList>
 
         <TabsContent value="users">
-          <div className="card">
+          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
             <h3 className="text-lg font-semibold mb-4">Registered Users</h3>
             {loading ? (
-              <div className="empty-state">
-                <div className="empty-icon">
+              <div className="text-center py-12 text-gray-500">
+                <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-4 text-gray-400">
                   <Loader2 className="h-8 w-8 animate-spin" />
                 </div>
                 <p>Loading users...</p>
@@ -166,8 +166,8 @@ export default function UserManagement() {
                     {users.length === 0 ? (
                       <TableRow>
                         <TableCell colSpan={5}>
-                          <div className="empty-state">
-                            <div className="empty-icon">
+                          <div className="text-center py-12 text-gray-500">
+                            <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-4 text-gray-400">
                               <User className="h-8 w-8" />
                             </div>
                             <p>No users found</p>
@@ -182,7 +182,7 @@ export default function UserManagement() {
                           <TableCell>{getRoleBadge(user.role)}</TableCell>
                           <TableCell className="text-gray-600">{user.companyName || "-"}</TableCell>
                           <TableCell>
-                            <span className={`status-badge ${user.status === "active" ? "success" : "info"}`}>
+                            <span className={`text-xs font-semibold px-2 py-1 rounded ${user.status === "active" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"}`}>
                               {user.status}
                             </span>
                           </TableCell>
@@ -201,7 +201,7 @@ export default function UserManagement() {
         </TabsContent>
 
         <TabsContent value="create">
-          <div className="card">
+          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
             <h3 className="text-lg font-semibold mb-4">Create New User</h3>
               <form onSubmit={handleCreateUser} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -267,12 +267,11 @@ export default function UserManagement() {
                 <button 
                   type="submit" 
                   disabled={creating || !newUser.role}
-                  className="btn btn-primary"
-                  style={{
-                    backgroundColor: creating || !newUser.role ? 'var(--gray-300)' : 'var(--success)',
-                    color: creating || !newUser.role ? 'var(--gray-500)' : 'white',
-                    cursor: creating || !newUser.role ? 'not-allowed' : 'pointer'
-                  }}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 inline-flex items-center gap-2 ${
+                    creating || !newUser.role 
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                      : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-md'
+                  }`}
                 >
                   {creating ? (
                     <>

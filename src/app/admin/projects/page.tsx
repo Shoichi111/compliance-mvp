@@ -159,11 +159,11 @@ export default function ProjectManagement() {
         </TabsList>
 
         <TabsContent value="projects">
-          <div className="card">
+          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
             <h3 className="text-lg font-semibold mb-4">Active Projects</h3>
             {loading ? (
-              <div className="empty-state">
-                <div className="empty-icon">
+              <div className="text-center py-12 text-gray-500">
+                <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-4 text-gray-400">
                   <Loader2 className="h-8 w-8 animate-spin" />
                 </div>
                 <p>Loading projects...</p>
@@ -183,8 +183,8 @@ export default function ProjectManagement() {
                     {projects.length === 0 ? (
                       <TableRow>
                         <TableCell colSpan={4}>
-                          <div className="empty-state">
-                            <div className="empty-icon">
+                          <div className="text-center py-12 text-gray-500">
+                            <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-4 text-gray-400">
                               <Building2 className="h-8 w-8" />
                             </div>
                             <p>No projects found</p>
@@ -200,7 +200,7 @@ export default function ProjectManagement() {
                           <TableCell>
                             <div className="flex flex-wrap gap-1">
                               {project.subcontractorEmails?.map((email, index) => (
-                                <span key={index} className="status-badge info">
+                                <span key={index} className="text-xs font-semibold px-2 py-1 rounded bg-blue-100 text-blue-800">
                                   {email}
                                 </span>
                               )) || <span className="text-gray-500">None assigned</span>}
@@ -221,7 +221,7 @@ export default function ProjectManagement() {
         </TabsContent>
 
         <TabsContent value="create">
-          <div className="card">
+          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
             <h3 className="text-lg font-semibold mb-4">Create New Project</h3>
               <form onSubmit={handleCreateProject} className="space-y-6">
                 <div className="space-y-2">
@@ -299,12 +299,11 @@ export default function ProjectManagement() {
                 <button 
                   type="submit" 
                   disabled={creating || !newProject.projectName || !newProject.assignedAdvisorId}
-                  className="btn btn-primary"
-                  style={{
-                    backgroundColor: creating || !newProject.projectName || !newProject.assignedAdvisorId ? 'var(--gray-300)' : 'var(--primary)',
-                    color: creating || !newProject.projectName || !newProject.assignedAdvisorId ? 'var(--gray-500)' : 'white',
-                    cursor: creating || !newProject.projectName || !newProject.assignedAdvisorId ? 'not-allowed' : 'pointer'
-                  }}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 inline-flex items-center gap-2 ${
+                    creating || !newProject.projectName || !newProject.assignedAdvisorId
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                      : 'bg-indigo-600 text-white hover:bg-indigo-700 hover:shadow-md'
+                  }`}
                 >
                   {creating ? (
                     <>
