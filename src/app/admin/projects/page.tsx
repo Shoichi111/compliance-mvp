@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -12,6 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { toast } from "sonner";
 import { Loader2, Plus, Building2 } from "lucide-react";
 
@@ -146,14 +146,11 @@ export default function ProjectManagement() {
   };
 
   return (
-    <div>
-      {/* Perfect Page Header */}
-      <div className="page-header">
-        <h1 className="page-title">Project Management</h1>
-        <p className="page-subtitle">
-          Create projects and assign advisors and subcontractors
-        </p>
-      </div>
+    <div className="p-8 max-w-7xl mx-auto">
+      <PageHeader
+        title="Project Management"
+        subtitle="Create projects and assign advisors and subcontractors"
+      />
 
       <Tabs defaultValue="projects" className="space-y-6">
         <TabsList className="mb-6">
@@ -163,23 +160,23 @@ export default function ProjectManagement() {
 
         <TabsContent value="projects">
           <div className="card">
-            <div className="card-title">Active Projects</div>
-            <div className="data-table">
-              {loading ? (
-                <div className="empty-state">
-                  <div className="empty-icon">
-                    <Loader2 className="h-8 w-8 animate-spin" />
-                  </div>
-                  <p>Loading projects...</p>
+            <h3 className="text-lg font-semibold mb-4">Active Projects</h3>
+            {loading ? (
+              <div className="empty-state">
+                <div className="empty-icon">
+                  <Loader2 className="h-8 w-8 animate-spin" />
                 </div>
-              ) : (
+                <p>Loading projects...</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead className="table-header">Project Name</TableHead>
-                      <TableHead className="table-header">Assigned Advisor</TableHead>
-                      <TableHead className="table-header">Subcontractors</TableHead>
-                      <TableHead className="table-header">Created</TableHead>
+                    <TableRow className="bg-gray-50">
+                      <TableHead className="font-semibold text-gray-700 py-4">Project Name</TableHead>
+                      <TableHead className="font-semibold text-gray-700">Assigned Advisor</TableHead>
+                      <TableHead className="font-semibold text-gray-700">Subcontractors</TableHead>
+                      <TableHead className="font-semibold text-gray-700">Created</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -191,25 +188,25 @@ export default function ProjectManagement() {
                               <Building2 className="h-8 w-8" />
                             </div>
                             <p>No projects found</p>
-                            <p style={{ fontSize: '14px', marginTop: '8px' }}>Create your first project in the Create Project tab</p>
+                            <p className="text-sm mt-2">Create your first project in the Create Project tab</p>
                           </div>
                         </TableCell>
                       </TableRow>
                     ) : (
                       projects.map((project) => (
-                        <TableRow key={project.id} className="table-row">
-                          <TableCell className="table-cell font-medium">{project.projectName}</TableCell>
-                          <TableCell className="table-cell">{project.assignedAdvisorEmail || "Unassigned"}</TableCell>
-                          <TableCell className="table-cell">
+                        <TableRow key={project.id} className="hover:bg-gray-50 transition-colors">
+                          <TableCell className="font-medium text-gray-800 py-4">{project.projectName}</TableCell>
+                          <TableCell className="text-gray-600">{project.assignedAdvisorEmail || "Unassigned"}</TableCell>
+                          <TableCell>
                             <div className="flex flex-wrap gap-1">
                               {project.subcontractorEmails?.map((email, index) => (
-                                <span key={index} className="badge badge-info">
+                                <span key={index} className="status-badge info">
                                   {email}
                                 </span>
-                              )) || <span style={{ color: 'var(--gray-500)' }}>None assigned</span>}
+                              )) || <span className="text-gray-500">None assigned</span>}
                             </div>
                           </TableCell>
-                          <TableCell className="table-cell">
+                          <TableCell className="text-gray-500">
                             {project.createdAt?.toDate?.()?.toLocaleDateString() || "N/A"}
                           </TableCell>
                         </TableRow>
@@ -217,14 +214,15 @@ export default function ProjectManagement() {
                     )}
                   </TableBody>
                 </Table>
-              )}
+              </div>
+            )}
             </div>
           </div>
         </TabsContent>
 
         <TabsContent value="create">
           <div className="card">
-            <div className="card-title">Create New Project</div>
+            <h3 className="text-lg font-semibold mb-4">Create New Project</h3>
               <form onSubmit={handleCreateProject} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="projectName">Project Name</Label>

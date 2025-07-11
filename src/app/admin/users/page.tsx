@@ -5,13 +5,13 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, addDoc, getDocs, doc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { toast } from "sonner";
 import { Loader2, Plus, User } from "lucide-react";
 
@@ -128,14 +128,11 @@ export default function UserManagement() {
   };
 
   return (
-    <div>
-      {/* Perfect Page Header */}
-      <div className="page-header">
-        <h1 className="page-title">User Management</h1>
-        <p className="page-subtitle">
-          Create and manage advisors and subcontractors
-        </p>
-      </div>
+    <div className="p-8 max-w-7xl mx-auto">
+      <PageHeader
+        title="User Management"
+        subtitle="Create and manage advisors and subcontractors"
+      />
 
       <Tabs defaultValue="users" className="space-y-6">
         <TabsList className="mb-6">
@@ -145,24 +142,24 @@ export default function UserManagement() {
 
         <TabsContent value="users">
           <div className="card">
-            <div className="card-title">Registered Users</div>
-            <div className="data-table">
-              {loading ? (
-                <div className="empty-state">
-                  <div className="empty-icon">
-                    <Loader2 className="h-8 w-8 animate-spin" />
-                  </div>
-                  <p>Loading users...</p>
+            <h3 className="text-lg font-semibold mb-4">Registered Users</h3>
+            {loading ? (
+              <div className="empty-state">
+                <div className="empty-icon">
+                  <Loader2 className="h-8 w-8 animate-spin" />
                 </div>
-              ) : (
+                <p>Loading users...</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead className="table-header">Email</TableHead>
-                      <TableHead className="table-header">Role</TableHead>
-                      <TableHead className="table-header">Company</TableHead>
-                      <TableHead className="table-header">Status</TableHead>
-                      <TableHead className="table-header">Created</TableHead>
+                    <TableRow className="bg-gray-50">
+                      <TableHead className="font-semibold text-gray-700 py-4">Email</TableHead>
+                      <TableHead className="font-semibold text-gray-700">Role</TableHead>
+                      <TableHead className="font-semibold text-gray-700">Company</TableHead>
+                      <TableHead className="font-semibold text-gray-700">Status</TableHead>
+                      <TableHead className="font-semibold text-gray-700">Created</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -174,22 +171,22 @@ export default function UserManagement() {
                               <User className="h-8 w-8" />
                             </div>
                             <p>No users found</p>
-                            <p style={{ fontSize: '14px', marginTop: '8px' }}>Create your first user in the Create User tab</p>
+                            <p className="text-sm mt-2">Create your first user in the Create User tab</p>
                           </div>
                         </TableCell>
                       </TableRow>
                     ) : (
                       users.map((user) => (
-                        <TableRow key={user.id} className="table-row">
-                          <TableCell className="table-cell font-medium">{user.email}</TableCell>
-                          <TableCell className="table-cell">{getRoleBadge(user.role)}</TableCell>
-                          <TableCell className="table-cell">{user.companyName || "-"}</TableCell>
-                          <TableCell className="table-cell">
-                            <span className={`badge ${user.status === "active" ? "badge-success" : "badge-info"}`}>
+                        <TableRow key={user.id} className="hover:bg-gray-50 transition-colors">
+                          <TableCell className="font-medium text-gray-800 py-4">{user.email}</TableCell>
+                          <TableCell>{getRoleBadge(user.role)}</TableCell>
+                          <TableCell className="text-gray-600">{user.companyName || "-"}</TableCell>
+                          <TableCell>
+                            <span className={`status-badge ${user.status === "active" ? "success" : "info"}`}>
                               {user.status}
                             </span>
                           </TableCell>
-                          <TableCell className="table-cell">
+                          <TableCell className="text-gray-500">
                             {user.createdAt?.toDate?.()?.toLocaleDateString() || "N/A"}
                           </TableCell>
                         </TableRow>
@@ -197,14 +194,15 @@ export default function UserManagement() {
                     )}
                   </TableBody>
                 </Table>
-              )}
+              </div>
+            )}
             </div>
           </div>
         </TabsContent>
 
         <TabsContent value="create">
           <div className="card">
-            <div className="card-title">Create New User</div>
+            <h3 className="text-lg font-semibold mb-4">Create New User</h3>
               <form onSubmit={handleCreateUser} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">

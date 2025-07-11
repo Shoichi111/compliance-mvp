@@ -3,10 +3,9 @@
 import { useState, useEffect } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { MetricCard } from "@/components/ui/MetricCard";
+import { StatusCard } from "@/components/ui/StatusCard";
 import { 
   Building2, 
   Users, 
@@ -71,116 +70,94 @@ export default function AdminDashboard() {
     fetchStats();
   }, []);
 
-  const StatCard = ({ title, value, description, icon: Icon, type, change }: any) => {
-    return (
-      <div className="metric-card">
-        <div className="metric-header">
-          <div className={`metric-icon ${type}`}>
-            <Icon className="h-6 w-6" />
-          </div>
-          <span className={`metric-change ${change && change > 0 ? 'positive' : 'negative'}`}>
-            {change ? `${change > 0 ? '+' : ''}${change}%` : '+0%'}
-          </span>
-        </div>
-        <p className="metric-label">{title}</p>
-        <p className="metric-value">
-          {stats.loading ? '--' : value}
-        </p>
-      </div>
-    );
-  };
+  const metrics = [
+    {
+      label: 'Active Users',
+      value: stats.loading ? '--' : stats.totalUsers,
+      icon: <Users className="w-6 h-6" />,
+      trend: { value: '+12%', isPositive: true },
+      iconColor: 'primary' as const
+    },
+    {
+      label: 'Active Projects',
+      value: stats.loading ? '--' : stats.totalProjects,
+      icon: <Building2 className="w-6 h-6" />,
+      trend: { value: '+5%', isPositive: true },
+      iconColor: 'success' as const
+    },
+    {
+      label: 'Total Submissions',
+      value: stats.loading ? '--' : stats.totalSubmissions,
+      icon: <FileText className="w-6 h-6" />,
+      trend: { value: '-3%', isPositive: false },
+      iconColor: 'warning' as const
+    },
+    {
+      label: 'Pending Reviews',
+      value: stats.loading ? '--' : stats.pendingSubmissions,
+      icon: <AlertCircle className="w-6 h-6" />,
+      trend: { value: '+8%', isPositive: true },
+      iconColor: 'error' as const
+    }
+  ];
 
   return (
-    <div>
-      {/* Perfect Page Header */}
-      <div className="page-header">
-        <h1 className="page-title">Admin Dashboard</h1>
-        <p className="page-subtitle">
-          Monitor compliance across all projects and manage system users
-        </p>
+    <div className="p-8 max-w-7xl mx-auto">
+      <PageHeader 
+        title="Admin Dashboard"
+        subtitle="Monitor compliance across all projects and manage system users"
+      />
+
+      {/* Metrics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {metrics.map((metric) => (
+          <MetricCard key={metric.label} {...metric} />
+        ))}
       </div>
 
-      {/* Perfect Metrics Grid */}
-      <div className="metrics-grid">
-        <StatCard
-          title="Active Users"
-          value={stats.totalUsers}
-          icon={Users}
-          type="users"
-          change={12}
-        />
-        <StatCard
-          title="Active Projects"
-          value={stats.totalProjects}
-          icon={Building2}
-          type="projects"
-          change={5}
-        />
-        <StatCard
-          title="Total Submissions"
-          value={stats.totalSubmissions}
-          icon={FileText}
-          type="submissions"
-          change={-3}
-        />
-        <StatCard
-          title="Pending Reviews"
-          value={stats.pendingSubmissions}
-          icon={AlertCircle}
-          type="reviews"
-          change={8}
-        />
-      </div>
+      {/* Status Cards */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <StatusCard title="Compliance Status">
+          <StatusCard.Item
+            label="On Track"
+            value={`${stats.totalProjects - stats.overdue} Projects`}
+            variant="success"
+            icon={<CheckCircle className="w-3 h-3" />}
+          />
+          <StatusCard.Item
+            label="At Risk"
+            value={`${stats.overdue} Projects`}
+            variant="warning"
+            icon={<AlertCircle className="w-3 h-3" />}
+          />
+          <StatusCard.Item
+            label="Completion Rate"
+            value={`${stats.totalProjects > 0 
+              ? Math.round(((stats.totalProjects - stats.overdue) / stats.totalProjects) * 100)
+              : 0}%`}
+            variant="info"
+            icon={<TrendingUp className="w-3 h-3" />}
+          />
+        </StatusCard>
 
-      {/* Perfect Status Grid */}
-      <div className="status-grid">
-        <div className="status-card">
-          <h3 className="status-card-title">Compliance Status</h3>
-          <div className="status-item">
-            <span className="status-label">On Track</span>
-            <span className="status-value on-track">
-              {stats.totalProjects - stats.overdue} Projects
-            </span>
-          </div>
-          <div className="status-item">
-            <span className="status-label">At Risk</span>
-            <span className="status-value at-risk">
-              {stats.overdue} Projects
-            </span>
-          </div>
-          <div className="status-item">
-            <span className="status-label">Completion Rate</span>
-            <span className="status-value percentage">
-              {stats.totalProjects > 0 
-                ? Math.round(((stats.totalProjects - stats.overdue) / stats.totalProjects) * 100)
-                : 0}%
-            </span>
-          </div>
-        </div>
-
-        <div className="status-card">
-          <h3 className="status-card-title">Recent Activity</h3>
+        <StatusCard title="Recent Activity">
           {stats.loading ? (
             <div className="empty-state">
               <div className="empty-icon">
-                <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <BarChart3 className="w-8 h-8" />
               </div>
               <p>Loading...</p>
             </div>
           ) : (
             <div className="empty-state">
               <div className="empty-icon">
-                <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <BarChart3 className="w-8 h-8" />
               </div>
               <p>No recent activity</p>
-              <p style={{ fontSize: '14px', marginTop: '8px' }}>Users and submissions will appear here</p>
+              <p className="text-sm mt-2">Users and submissions will appear here</p>
             </div>
           )}
-        </div>
+        </StatusCard>
       </div>
     </div>
   );
