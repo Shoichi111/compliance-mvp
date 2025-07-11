@@ -208,7 +208,7 @@ export default function LoginPage() {
           
           {/* Demo credentials info */}
           <div 
-            className="mt-8 p-6 rounded-xl"
+            className="mt-6 p-4 rounded-lg"
             style={{
               background: 'linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)',
               border: '1px solid #e2e8f0'
@@ -216,36 +216,47 @@ export default function LoginPage() {
           >
             <p 
               className="font-semibold mb-3 flex items-center"
-              style={{ color: '#1e293b' }}
+              style={{ color: '#1e293b', fontSize: '0.875rem' }}
             >
-              <svg className="w-4 h-4 mr-2" style={{ color: '#3b82f6' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg 
+                style={{ 
+                  width: '1rem', 
+                  height: '1rem', 
+                  marginRight: '0.5rem',
+                  color: '#3b82f6',
+                  flexShrink: 0
+                }} 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               Demo Credentials:
             </p>
-            <div className="space-y-2 text-sm">
+            <div className="space-y-1 text-sm">
               <div 
-                className="flex justify-between items-center p-3 rounded-lg"
-                style={{ backgroundColor: 'white', border: '1px solid #e2e8f0' }}
+                className="flex justify-between items-center p-2 rounded"
+                style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', fontSize: '0.75rem' }}
               >
                 <span style={{ color: '#64748b' }}>Admin:</span>
                 <span className="font-mono" style={{ color: '#1e293b' }}>admin@demo.com</span>
               </div>
               <div 
-                className="flex justify-between items-center p-3 rounded-lg"
-                style={{ backgroundColor: 'white', border: '1px solid #e2e8f0' }}
+                className="flex justify-between items-center p-2 rounded"
+                style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', fontSize: '0.75rem' }}
               >
                 <span style={{ color: '#64748b' }}>Advisor:</span>
                 <span className="font-mono" style={{ color: '#1e293b' }}>alice@advisor.com</span>
               </div>
               <div 
-                className="flex justify-between items-center p-3 rounded-lg"
-                style={{ backgroundColor: 'white', border: '1px solid #e2e8f0' }}
+                className="flex justify-between items-center p-2 rounded"
+                style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', fontSize: '0.75rem' }}
               >
                 <span style={{ color: '#64748b' }}>Subcontractor:</span>
                 <span className="font-mono" style={{ color: '#1e293b' }}>apex@construction.com</span>
               </div>
-              <p className="text-xs mt-3 text-center" style={{ color: '#64748b' }}>
+              <p className="text-xs mt-2 text-center" style={{ color: '#64748b' }}>
                 All demo passwords: Use the password provided during setup
               </p>
             </div>
