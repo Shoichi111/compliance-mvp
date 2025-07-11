@@ -67,18 +67,27 @@ export default function LoginPage() {
 
   return (
     <div 
-      className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
       style={{
-        background: 'linear-gradient(135deg, #f1f5f9 0%, #dbeafe 50%, #f1f5f9 100%)'
+        minHeight: '100vh',
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem 1rem',
+        background: 'linear-gradient(135deg, #f1f5f9 0%, #dbeafe 50%, #f1f5f9 100%)',
+        boxSizing: 'border-box'
       }}
     >
-      <Card 
-        className="w-full max-w-md overflow-hidden"
-        style={{
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-          border: 'none'
-        }}
-      >
+      <div style={{ width: '100%', maxWidth: '28rem' }}>
+        <Card 
+          style={{
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+            border: 'none',
+            borderRadius: '1rem',
+            overflow: 'hidden',
+            background: 'white'
+          }}
+        >
         <CardHeader 
           className="space-y-4 p-8"
           style={{
@@ -242,7 +251,8 @@ export default function LoginPage() {
             </div>
           </div>
         </CardContent>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 }
