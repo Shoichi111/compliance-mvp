@@ -71,126 +71,113 @@ export default function AdminDashboard() {
     fetchStats();
   }, []);
 
-  const StatCard = ({ title, value, description, icon: Icon }: any) => {
+  const StatCard = ({ title, value, description, icon: Icon, type, change }: any) => {
     return (
       <div className="metric-card">
-        <div className="metric-icon">
-          <Icon className="h-5 w-5" />
+        <div className="metric-header">
+          <div className={`metric-icon ${type}`}>
+            <Icon className="h-6 w-6" />
+          </div>
+          <span className={`metric-change ${change && change > 0 ? 'positive' : 'negative'}`}>
+            {change ? `${change > 0 ? '+' : ''}${change}%` : '+0%'}
+          </span>
         </div>
-        <div className="metric-content">
-          <p className="metric-label">{title}</p>
-          <p className="metric-value">
-            {stats.loading ? (
-              <span style={{ color: 'var(--gray-400)' }}>--</span>
-            ) : (
-              value
-            )}
-          </p>
-          <p style={{ fontSize: 'var(--text-xs)', color: 'var(--gray-500)', margin: '4px 0 0 0' }}>
-            {description}
-          </p>
-        </div>
+        <p className="metric-label">{title}</p>
+        <p className="metric-value">
+          {stats.loading ? '--' : value}
+        </p>
       </div>
     );
   };
 
   return (
     <div>
-      {/* Professional Page Header */}
+      {/* Perfect Page Header */}
       <div className="page-header">
-        <div className="flex items-center space-x-4">
-          <div className="metric-icon">
-            <BarChart3 className="h-6 w-6" />
-          </div>
-          <div>
-            <h1 className="page-title">Admin Dashboard</h1>
-            <p className="page-subtitle">
-              Monitor compliance across all projects and manage system users
-            </p>
-          </div>
-        </div>
+        <h1 className="page-title">Admin Dashboard</h1>
+        <p className="page-subtitle">
+          Monitor compliance across all projects and manage system users
+        </p>
       </div>
 
-      {/* Professional Metrics Grid */}
+      {/* Perfect Metrics Grid */}
       <div className="metrics-grid">
         <StatCard
           title="Active Users"
           value={stats.totalUsers}
-          description="Total registered users"
           icon={Users}
+          type="users"
+          change={12}
         />
         <StatCard
           title="Active Projects"
           value={stats.totalProjects}
-          description="Projects in progress"
           icon={Building2}
+          type="projects"
+          change={5}
         />
         <StatCard
           title="Total Submissions"
           value={stats.totalSubmissions}
-          description="Safety reports submitted"
           icon={FileText}
+          type="submissions"
+          change={-3}
         />
         <StatCard
           title="Pending Reviews"
           value={stats.pendingSubmissions}
-          description="Awaiting submission"
           icon={AlertCircle}
+          type="reviews"
+          change={8}
         />
       </div>
 
-      {/* Professional Status Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-6)' }}>
-        <div className="card">
-          <h3 className="card-title">Compliance Status</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--gray-700)' }}>
-                On Track
-              </span>
-              <span className="badge badge-success">
-                <CheckCircle style={{ width: '12px', height: '12px', marginRight: '4px' }} />
-                {stats.totalProjects - stats.overdue}
-              </span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--gray-700)' }}>
-                At Risk
-              </span>
-              <span className="badge badge-error">
-                <AlertCircle style={{ width: '12px', height: '12px', marginRight: '4px' }} />
-                {stats.overdue}
-              </span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--gray-700)' }}>
-                Completion Rate
-              </span>
-              <span style={{ fontSize: 'var(--text-sm)', fontWeight: '600', color: 'var(--gray-900)' }}>
-                {stats.totalProjects > 0 
-                  ? Math.round(((stats.totalProjects - stats.overdue) / stats.totalProjects) * 100)
-                  : 0}%
-              </span>
-            </div>
+      {/* Perfect Status Grid */}
+      <div className="status-grid">
+        <div className="status-card">
+          <h3 className="status-card-title">Compliance Status</h3>
+          <div className="status-item">
+            <span className="status-label">On Track</span>
+            <span className="status-value on-track">
+              {stats.totalProjects - stats.overdue} Projects
+            </span>
+          </div>
+          <div className="status-item">
+            <span className="status-label">At Risk</span>
+            <span className="status-value at-risk">
+              {stats.overdue} Projects
+            </span>
+          </div>
+          <div className="status-item">
+            <span className="status-label">Completion Rate</span>
+            <span className="status-value percentage">
+              {stats.totalProjects > 0 
+                ? Math.round(((stats.totalProjects - stats.overdue) / stats.totalProjects) * 100)
+                : 0}%
+            </span>
           </div>
         </div>
 
-        <div className="card">
-          <h3 className="card-title">Recent Activity</h3>
+        <div className="status-card">
+          <h3 className="status-card-title">Recent Activity</h3>
           {stats.loading ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-              <div style={{ height: '16px', background: 'var(--gray-200)', borderRadius: '4px' }}></div>
-              <div style={{ height: '16px', background: 'var(--gray-200)', borderRadius: '4px', width: '75%' }}></div>
-              <div style={{ height: '16px', background: 'var(--gray-200)', borderRadius: '4px', width: '50%' }}></div>
+            <div className="empty-state">
+              <div className="empty-icon">
+                <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <p>Loading...</p>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--gray-600)' }}>
-                No recent activity
-              </p>
-              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--gray-500)' }}>
-                Users and submissions will appear here
-              </p>
+            <div className="empty-state">
+              <div className="empty-icon">
+                <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <p>No recent activity</p>
+              <p style={{ fontSize: '14px', marginTop: '8px' }}>Users and submissions will appear here</p>
             </div>
           )}
         </div>

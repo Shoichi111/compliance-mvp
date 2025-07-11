@@ -128,175 +128,83 @@ export default function UserManagement() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Page Header */}
-      <div 
-        className="p-6 rounded-lg shadow-lg mb-6"
-        style={{
-          background: 'linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%)',
-          color: 'white'
-        }}
-      >
-        <div className="flex items-center space-x-4">
-          <div 
-            className="w-12 h-12 rounded-xl flex items-center justify-center"
-            style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
-          >
-            <User className="h-6 w-6 text-white" />
-          </div>
-          <div>
-            <h1 className="text-3xl font-bold text-white">User Management</h1>
-            <p className="mt-1" style={{ color: '#dbeafe' }}>
-              Create and manage advisors and subcontractors
-            </p>
-          </div>
-        </div>
+    <div>
+      {/* Perfect Page Header */}
+      <div className="page-header">
+        <h1 className="page-title">User Management</h1>
+        <p className="page-subtitle">
+          Create and manage advisors and subcontractors
+        </p>
       </div>
 
       <Tabs defaultValue="users" className="space-y-6">
-        <TabsList 
-          className="shadow-sm"
-          style={{
-            backgroundColor: 'white',
-            border: '1px solid #e2e8f0',
-            borderRadius: '0.5rem',
-            padding: '0.25rem'
-          }}
-        >
-          <TabsTrigger 
-            value="users"
-            style={{
-              borderRadius: '0.375rem',
-              padding: '0.5rem 1rem',
-              fontSize: '0.875rem',
-              fontWeight: '500'
-            }}
-          >
-            All Users
-          </TabsTrigger>
-          <TabsTrigger 
-            value="create"
-            style={{
-              borderRadius: '0.375rem',
-              padding: '0.5rem 1rem',
-              fontSize: '0.875rem',
-              fontWeight: '500'
-            }}
-          >
-            Create User
-          </TabsTrigger>
+        <TabsList className="mb-6">
+          <TabsTrigger value="users">All Users</TabsTrigger>
+          <TabsTrigger value="create">Create User</TabsTrigger>
         </TabsList>
 
         <TabsContent value="users">
-          <Card 
-            style={{
-              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-              border: 'none',
-              borderRadius: '0.75rem'
-            }}
-          >
-            <CardHeader 
-              style={{
-                backgroundColor: '#f8fafc',
-                borderBottom: '1px solid #e2e8f0',
-                padding: '1.5rem'
-              }}
-            >
-              <CardTitle 
-                className="flex items-center"
-                style={{ color: '#1e293b', fontSize: '1.25rem' }}
-              >
-                <User className="h-5 w-5 mr-2" style={{ color: '#2563eb' }} />
-                Registered Users
-              </CardTitle>
-              <CardDescription style={{ color: '#64748b' }}>
-                All users registered in the compliance platform
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
+          <div className="card">
+            <div className="card-title">Registered Users</div>
+            <div className="data-table">
               {loading ? (
-                <div className="flex flex-col items-center justify-center py-12">
-                  <Loader2 className="h-8 w-8 animate-spin text-blue-500 mb-4" />
-                  <p className="text-slate-500">Loading users...</p>
+                <div className="empty-state">
+                  <div className="empty-icon">
+                    <Loader2 className="h-8 w-8 animate-spin" />
+                  </div>
+                  <p>Loading users...</p>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="bg-slate-50">
-                        <TableHead className="font-semibold text-slate-700 py-4">Email</TableHead>
-                        <TableHead className="font-semibold text-slate-700">Role</TableHead>
-                        <TableHead className="font-semibold text-slate-700">Company</TableHead>
-                        <TableHead className="font-semibold text-slate-700">Status</TableHead>
-                        <TableHead className="font-semibold text-slate-700">Created</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {users.length === 0 ? (
-                        <TableRow>
-                          <TableCell colSpan={5} className="text-center py-12">
-                            <div className="flex flex-col items-center">
-                              <User className="h-12 w-12 text-slate-300 mb-4" />
-                              <p className="text-slate-500 font-medium">No users found</p>
-                              <p className="text-slate-400 text-sm">Create your first user in the Create User tab</p>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="table-header">Email</TableHead>
+                      <TableHead className="table-header">Role</TableHead>
+                      <TableHead className="table-header">Company</TableHead>
+                      <TableHead className="table-header">Status</TableHead>
+                      <TableHead className="table-header">Created</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {users.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={5}>
+                          <div className="empty-state">
+                            <div className="empty-icon">
+                              <User className="h-8 w-8" />
                             </div>
+                            <p>No users found</p>
+                            <p style={{ fontSize: '14px', marginTop: '8px' }}>Create your first user in the Create User tab</p>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      users.map((user) => (
+                        <TableRow key={user.id} className="table-row">
+                          <TableCell className="table-cell font-medium">{user.email}</TableCell>
+                          <TableCell className="table-cell">{getRoleBadge(user.role)}</TableCell>
+                          <TableCell className="table-cell">{user.companyName || "-"}</TableCell>
+                          <TableCell className="table-cell">
+                            <span className={`badge ${user.status === "active" ? "badge-success" : "badge-info"}`}>
+                              {user.status}
+                            </span>
+                          </TableCell>
+                          <TableCell className="table-cell">
+                            {user.createdAt?.toDate?.()?.toLocaleDateString() || "N/A"}
                           </TableCell>
                         </TableRow>
-                      ) : (
-                        users.map((user) => (
-                          <TableRow key={user.id} className="hover:bg-slate-50 transition-colors">
-                            <TableCell className="font-medium text-slate-800 py-4">{user.email}</TableCell>
-                            <TableCell>{getRoleBadge(user.role)}</TableCell>
-                            <TableCell className="text-slate-600">{user.companyName || "-"}</TableCell>
-                            <TableCell>
-                              <Badge 
-                                variant={user.status === "active" ? "default" : "secondary"}
-                                className={user.status === "active" ? "bg-green-100 text-green-800 hover:bg-green-100" : ""}
-                              >
-                                {user.status}
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="text-slate-500">
-                              {user.createdAt?.toDate?.()?.toLocaleDateString() || "N/A"}
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      )}
-                    </TableBody>
-                  </Table>
-                </div>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </TabsContent>
 
         <TabsContent value="create">
-          <Card 
-            style={{
-              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-              border: 'none',
-              borderRadius: '0.75rem'
-            }}
-          >
-            <CardHeader 
-              style={{
-                backgroundColor: '#f8fafc',
-                borderBottom: '1px solid #e2e8f0',
-                padding: '1.5rem'
-              }}
-            >
-              <CardTitle 
-                className="flex items-center"
-                style={{ color: '#1e293b', fontSize: '1.25rem' }}
-              >
-                <Plus className="h-5 w-5 mr-2" style={{ color: '#16a34a' }} />
-                Create New User
-              </CardTitle>
-              <CardDescription style={{ color: '#64748b' }}>
-                Add advisors and subcontractors to the platform
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-6">
+          <div className="card">
+            <div className="card-title">Create New User</div>
               <form onSubmit={handleCreateUser} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
@@ -358,31 +266,14 @@ export default function UserManagement() {
                   )}
                 </div>
 
-                <Button 
+                <button 
                   type="submit" 
                   disabled={creating || !newUser.role}
+                  className="btn btn-primary"
                   style={{
-                    backgroundColor: '#16a34a',
-                    color: 'white',
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '1rem',
-                    fontWeight: '500',
-                    border: 'none',
-                    boxShadow: '0 4px 14px 0 rgba(22, 163, 74, 0.4)',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!creating && newUser.role) {
-                      e.currentTarget.style.backgroundColor = '#15803d';
-                      e.currentTarget.style.boxShadow = '0 8px 25px 0 rgba(22, 163, 74, 0.5)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!creating && newUser.role) {
-                      e.currentTarget.style.backgroundColor = '#16a34a';
-                      e.currentTarget.style.boxShadow = '0 4px 14px 0 rgba(22, 163, 74, 0.4)';
-                    }
+                    backgroundColor: creating || !newUser.role ? 'var(--gray-300)' : 'var(--success)',
+                    color: creating || !newUser.role ? 'var(--gray-500)' : 'white',
+                    cursor: creating || !newUser.role ? 'not-allowed' : 'pointer'
                   }}
                 >
                   {creating ? (
@@ -396,56 +287,10 @@ export default function UserManagement() {
                       Create {newUser.role || "User"}
                     </>
                   )}
-                </Button>
+                </button>
               </form>
 
-              <div 
-                className="mt-8 p-6 rounded-xl"
-                style={{
-                  background: 'linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%)',
-                  border: '1px solid #3b82f6'
-                }}
-              >
-                <h4 
-                  className="font-semibold mb-3 flex items-center"
-                  style={{ color: '#1e3a8a' }}
-                >
-                  <User className="h-4 w-4 mr-2" />
-                  User Creation Notes:
-                </h4>
-                <ul className="text-sm space-y-2" style={{ color: '#1e40af' }}>
-                  <li className="flex items-start">
-                    <span 
-                      className="w-2 h-2 rounded-full mt-2 mr-3 flex-shrink-0"
-                      style={{ backgroundColor: '#60a5fa' }}
-                    ></span>
-                    Users will receive their credentials via email (future feature)
-                  </li>
-                  <li className="flex items-start">
-                    <span 
-                      className="w-2 h-2 rounded-full mt-2 mr-3 flex-shrink-0"
-                      style={{ backgroundColor: '#60a5fa' }}
-                    ></span>
-                    Advisors can view submissions for assigned projects
-                  </li>
-                  <li className="flex items-start">
-                    <span 
-                      className="w-2 h-2 rounded-full mt-2 mr-3 flex-shrink-0"
-                      style={{ backgroundColor: '#60a5fa' }}
-                    ></span>
-                    Subcontractors can submit monthly reports and annual documents
-                  </li>
-                  <li className="flex items-start">
-                    <span 
-                      className="w-2 h-2 rounded-full mt-2 mr-3 flex-shrink-0"
-                      style={{ backgroundColor: '#60a5fa' }}
-                    ></span>
-                    Company name is required for subcontractor accounts
-                  </li>
-                </ul>
-              </div>
-            </CardContent>
-          </Card>
+          </div>
         </TabsContent>
       </Tabs>
     </div>

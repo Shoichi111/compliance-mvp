@@ -146,65 +146,70 @@ export default function ProjectManagement() {
   };
 
   return (
-    <div className="p-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Project Management</h1>
-        <p className="text-gray-600 mt-2">
+    <div>
+      {/* Perfect Page Header */}
+      <div className="page-header">
+        <h1 className="page-title">Project Management</h1>
+        <p className="page-subtitle">
           Create projects and assign advisors and subcontractors
         </p>
       </div>
 
       <Tabs defaultValue="projects" className="space-y-6">
-        <TabsList>
+        <TabsList className="mb-6">
           <TabsTrigger value="projects">All Projects</TabsTrigger>
           <TabsTrigger value="create">Create Project</TabsTrigger>
         </TabsList>
 
         <TabsContent value="projects">
-          <Card>
-            <CardHeader>
-              <CardTitle>Active Projects</CardTitle>
-              <CardDescription>
-                All projects in the compliance platform
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+          <div className="card">
+            <div className="card-title">Active Projects</div>
+            <div className="data-table">
               {loading ? (
-                <div className="flex justify-center py-8">
-                  <Loader2 className="h-6 w-6 animate-spin" />
+                <div className="empty-state">
+                  <div className="empty-icon">
+                    <Loader2 className="h-8 w-8 animate-spin" />
+                  </div>
+                  <p>Loading projects...</p>
                 </div>
               ) : (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Project Name</TableHead>
-                      <TableHead>Assigned Advisor</TableHead>
-                      <TableHead>Subcontractors</TableHead>
-                      <TableHead>Created</TableHead>
+                      <TableHead className="table-header">Project Name</TableHead>
+                      <TableHead className="table-header">Assigned Advisor</TableHead>
+                      <TableHead className="table-header">Subcontractors</TableHead>
+                      <TableHead className="table-header">Created</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {projects.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={4} className="text-center py-8 text-gray-500">
-                          No projects found. Create your first project in the Create Project tab.
+                        <TableCell colSpan={4}>
+                          <div className="empty-state">
+                            <div className="empty-icon">
+                              <Building2 className="h-8 w-8" />
+                            </div>
+                            <p>No projects found</p>
+                            <p style={{ fontSize: '14px', marginTop: '8px' }}>Create your first project in the Create Project tab</p>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ) : (
                       projects.map((project) => (
-                        <TableRow key={project.id}>
-                          <TableCell className="font-medium">{project.projectName}</TableCell>
-                          <TableCell>{project.assignedAdvisorEmail || "Unassigned"}</TableCell>
-                          <TableCell>
+                        <TableRow key={project.id} className="table-row">
+                          <TableCell className="table-cell font-medium">{project.projectName}</TableCell>
+                          <TableCell className="table-cell">{project.assignedAdvisorEmail || "Unassigned"}</TableCell>
+                          <TableCell className="table-cell">
                             <div className="flex flex-wrap gap-1">
                               {project.subcontractorEmails?.map((email, index) => (
-                                <Badge key={index} variant="secondary" className="text-xs">
+                                <span key={index} className="badge badge-info">
                                   {email}
-                                </Badge>
-                              )) || <span className="text-gray-500">None assigned</span>}
+                                </span>
+                              )) || <span style={{ color: 'var(--gray-500)' }}>None assigned</span>}
                             </div>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="table-cell">
                             {project.createdAt?.toDate?.()?.toLocaleDateString() || "N/A"}
                           </TableCell>
                         </TableRow>
@@ -213,19 +218,13 @@ export default function ProjectManagement() {
                   </TableBody>
                 </Table>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </TabsContent>
 
         <TabsContent value="create">
-          <Card>
-            <CardHeader>
-              <CardTitle>Create New Project</CardTitle>
-              <CardDescription>
-                Set up a new project with advisor and subcontractor assignments
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+          <div className="card">
+            <div className="card-title">Create New Project</div>
               <form onSubmit={handleCreateProject} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="projectName">Project Name</Label>
@@ -299,9 +298,15 @@ export default function ProjectManagement() {
                   )}
                 </div>
 
-                <Button 
+                <button 
                   type="submit" 
                   disabled={creating || !newProject.projectName || !newProject.assignedAdvisorId}
+                  className="btn btn-primary"
+                  style={{
+                    backgroundColor: creating || !newProject.projectName || !newProject.assignedAdvisorId ? 'var(--gray-300)' : 'var(--primary)',
+                    color: creating || !newProject.projectName || !newProject.assignedAdvisorId ? 'var(--gray-500)' : 'white',
+                    cursor: creating || !newProject.projectName || !newProject.assignedAdvisorId ? 'not-allowed' : 'pointer'
+                  }}
                 >
                   {creating ? (
                     <>
@@ -314,20 +319,10 @@ export default function ProjectManagement() {
                       Create Project
                     </>
                   )}
-                </Button>
+                </button>
               </form>
 
-              <div className="mt-8 p-4 bg-green-50 rounded-lg border border-green-200">
-                <h4 className="font-medium text-green-800 mb-2">Project Setup Notes:</h4>
-                <ul className="text-sm text-green-700 space-y-1">
-                  <li>• Each project requires an assigned advisor</li>
-                  <li>• Multiple subcontractors can be assigned to one project</li>
-                  <li>• Subcontractors will submit monthly reports per assigned project</li>
-                  <li>• Advisors can view submissions for their assigned projects only</li>
-                </ul>
-              </div>
-            </CardContent>
-          </Card>
+          </div>
         </TabsContent>
       </Tabs>
     </div>
