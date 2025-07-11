@@ -81,44 +81,32 @@ export default function SetupAdminPage() {
             </AlertDescription>
           </Alert>
 
-          <form onSubmit={handleCreateAdmin} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Admin Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="admin@yourcompany.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={isLoading}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Admin Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter a secure password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-                disabled={isLoading}
-              />
-              <p className="text-sm text-gray-600">Password must be at least 6 characters</p>
-            </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+          <div className="space-y-4">
+            <Button 
+              onClick={() => {
+                setEmail("admin@demo.com");
+                setPassword("demo123");
+                handleCreateAdmin({ preventDefault: () => {} } as React.FormEvent);
+              }}
+              className="w-full bg-green-600 hover:bg-green-700" 
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating Admin Account...
+                  Creating Demo Users...
                 </>
               ) : (
-                "Create Admin Account"
+                "🚀 Create ALL Demo Users (Quick Setup)"
               )}
             </Button>
-          </form>
+            
+            <div className="text-center text-sm text-gray-600">
+              This will create: admin@demo.com, alice@advisor.com, apex@construction.com
+              <br />
+              All with password: <strong>demo123</strong>
+            </div>
+          </div>
 
           <div className="mt-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
             <h4 className="font-medium text-yellow-800 mb-2">Security Notice:</h4>
