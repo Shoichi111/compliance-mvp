@@ -4,30 +4,62 @@
 
 @layer base {
   :root {
-    /* Construction-themed color palette */
-    --background: 248 250 252; /* slate-50 */
-    --foreground: 15 23 42; /* slate-800 */
-    --card: 255 255 255; /* white */
-    --card-foreground: 15 23 42; /* slate-800 */
-    --popover: 255 255 255;
-    --popover-foreground: 15 23 42;
-    --primary: 30 64 175; /* blue-700 - construction safety blue */
-    --primary-foreground: 248 250 252;
-    --secondary: 241 245 249; /* slate-100 */
-    --secondary-foreground: 30 41 59; /* slate-700 */
-    --muted: 241 245 249; /* slate-100 */
-    --muted-foreground: 100 116 139; /* slate-500 */
-    --accent: 59 130 246; /* blue-500 */
-    --accent-foreground: 255 255 255;
-    --destructive: 220 38 38; /* red-600 */
-    --destructive-foreground: 254 242 242;
-    --warning: 245 158 11; /* amber-500 */
-    --warning-foreground: 255 255 255;
-    --success: 34 197 94; /* green-500 */
-    --success-foreground: 255 255 255;
-    --border: 226 232 240; /* slate-200 */
+    /* Professional Design System */
+    /* Primary Colors */
+    --primary: #6366f1;        /* Indigo for primary actions */
+    --primary-hover: #4f46e5;  /* Darker indigo for hover */
+    
+    /* Neutral Colors */
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    
+    /* Semantic Colors */
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --info: #3b82f6;
+    
+    /* Background Colors */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9fafb;
+    --bg-tertiary: #f3f4f6;
+    
+    /* Typography System */
+    --text-xs: 0.75rem;    /* 12px */
+    --text-sm: 0.875rem;   /* 14px */
+    --text-base: 1rem;     /* 16px */
+    --text-lg: 1.125rem;   /* 18px */
+    --text-xl: 1.25rem;    /* 20px */
+    --text-2xl: 1.5rem;    /* 24px */
+    --text-3xl: 1.875rem;  /* 30px */
+    
+    /* Spacing System (8px base) */
+    --space-1: 0.25rem;  /* 4px */
+    --space-2: 0.5rem;   /* 8px */
+    --space-3: 0.75rem;  /* 12px */
+    --space-4: 1rem;     /* 16px */
+    --space-5: 1.25rem;  /* 20px */
+    --space-6: 1.5rem;   /* 24px */
+    --space-8: 2rem;     /* 32px */
+    --space-10: 2.5rem;  /* 40px */
+    --space-12: 3rem;    /* 48px */
+    
+    /* Legacy variables for compatibility */
+    --background: 248 250 252;
+    --foreground: 15 23 42;
+    --card: 255 255 255;
+    --card-foreground: 15 23 42;
+    --border: 226 232 240;
     --input: 226 232 240;
-    --ring: 59 130 246; /* blue-500 */
+    --ring: 59 130 246;
     --radius: 0.75rem;
   }
 
@@ -60,89 +92,248 @@
 
 @layer base {
   * {
-    @apply border-slate-200 dark:border-slate-700;
+    box-sizing: border-box;
   }
   
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
+    color: var(--gray-800);
+    background-color: var(--bg-secondary);
+    margin: 0;
+    padding: 0;
   }
 
-  /* Enhanced typography */
-  h1 {
-    @apply text-3xl font-bold text-slate-900 dark:text-slate-100;
+  /* Professional Component System */
+  
+  /* Layout Components */
+  .page-container {
+    background: var(--bg-secondary);
+    min-height: 100vh;
   }
   
-  h2 {
-    @apply text-2xl font-semibold text-slate-800 dark:text-slate-200;
+  .content-wrapper {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-6);
   }
   
-  h3 {
-    @apply text-xl font-semibold text-slate-700 dark:text-slate-300;
-  }
-
-  /* Better form styling */
-  input, textarea, select {
-    @apply transition-all duration-200 focus:ring-2 focus:ring-primary/20;
-  }
-
-  /* Construction safety color utilities */
-  .text-safety-green {
-    @apply text-emerald-600 dark:text-emerald-400;
-  }
-  
-  .text-safety-yellow {
-    @apply text-amber-600 dark:text-amber-400;
-  }
-  
-  .text-safety-red {
-    @apply text-red-600 dark:text-red-400;
-  }
-
-  .bg-safety-green {
-    @apply bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800;
-  }
-  
-  .bg-safety-yellow {
-    @apply bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800;
-  }
-  
-  .bg-safety-red {
-    @apply bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800;
-  }
-
-  /* Page section styling */
   .page-header {
-    @apply bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 rounded-lg shadow-lg mb-6;
+    background: var(--bg-primary);
+    padding: var(--space-6);
+    border-radius: 12px;
+    margin-bottom: var(--space-6);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--gray-200);
   }
-
-  .content-section {
-    @apply bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6 mb-6;
+  
+  .page-title {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 4px;
   }
-
-  .sidebar-nav {
-    @apply bg-gradient-to-b from-slate-800 to-slate-900 text-white;
+  
+  .page-subtitle {
+    font-size: var(--text-base);
+    color: var(--gray-600);
+    margin: 0;
   }
-
-  /* Enhanced card styling */
+  
+  /* Card Components */
+  .card {
+    background: var(--bg-primary);
+    border-radius: 12px;
+    padding: var(--space-6);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--gray-200);
+    margin-bottom: var(--space-4);
+  }
+  
+  .card-title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: var(--space-4);
+  }
+  
+  /* Metric Cards */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+  
   .metric-card {
-    @apply bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-6 transition-all duration-200 hover:shadow-xl hover:scale-105;
+    background: var(--bg-primary);
+    border-radius: 8px;
+    padding: var(--space-6);
+    border: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    transition: all 0.2s ease;
   }
-
-  .status-card {
-    @apply rounded-lg p-4 border-l-4 shadow-sm;
+  
+  .metric-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   }
-
-  .status-submitted {
-    @apply bg-green-50 dark:bg-green-900/20 border-l-green-500 text-green-800 dark:text-green-200;
+  
+  .metric-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--gray-100);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    flex-shrink: 0;
   }
-
-  .status-pending {
-    @apply bg-yellow-50 dark:bg-yellow-900/20 border-l-yellow-500 text-yellow-800 dark:text-yellow-200;
+  
+  .metric-content {
+    flex: 1;
   }
-
-  .status-overdue {
-    @apply bg-red-50 dark:bg-red-900/20 border-l-red-500 text-red-800 dark:text-red-200;
+  
+  .metric-label {
+    font-size: var(--text-sm);
+    color: var(--gray-600);
+    margin-bottom: 4px;
+  }
+  
+  .metric-value {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--gray-900);
+    margin: 0;
+  }
+  
+  /* Button Components */
+  .btn {
+    padding: var(--space-2) var(--space-4);
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+    font-size: var(--text-sm);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn-secondary {
+    background: var(--bg-primary);
+    color: var(--gray-700);
+    border: 1px solid var(--gray-300);
+  }
+  
+  .btn-secondary:hover {
+    background: var(--gray-50);
+  }
+  
+  /* Navigation Header */
+  .header {
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--gray-200);
+    height: 64px;
+    padding: 0 var(--space-6);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  }
+  
+  .nav-item {
+    padding: var(--space-2) var(--space-4);
+    color: var(--gray-700);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .nav-item:hover {
+    background: var(--gray-100);
+    color: var(--primary);
+  }
+  
+  .nav-item.active {
+    background: var(--primary);
+    color: white;
+  }
+  
+  /* Data Table */
+  .data-table {
+    background: var(--bg-primary);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+  }
+  
+  .table-header {
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
+    padding: var(--space-3) var(--space-4);
+    font-weight: 600;
+    color: var(--gray-700);
+    font-size: var(--text-sm);
+  }
+  
+  .table-row {
+    border-bottom: 1px solid var(--gray-200);
+    padding: var(--space-3) var(--space-4);
+    transition: all 0.2s ease;
+  }
+  
+  .table-row:hover {
+    background: var(--gray-50);
+  }
+  
+  .table-cell {
+    padding: var(--space-3) var(--space-4);
+    color: var(--gray-700);
+  }
+  
+  /* Status Badges */
+  .badge {
+    padding: var(--space-1) var(--space-2);
+    border-radius: 4px;
+    font-size: var(--text-xs);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .badge-success {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+  }
+  
+  .badge-warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+  }
+  
+  .badge-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error);
+  }
+  
+  .badge-info {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--info);
   }
 }
 
