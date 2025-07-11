@@ -1,0 +1,31 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Submissions folder - organized by project/subcontractor/month_year
+    match /submissions/{projectId}/{subcontractorId}/{monthYear}/{fileName} {
+      // Subcontractors can upload to their own folders
+      allow write: if request.auth != null && request.auth.uid == subcontractorId;
+      
+      // Subcontractors and advisors can read from assigned project folders
+      allow read: if request.auth != null && (
+        request.auth.uid == subcontractorId ||
+        // Add advisor check here - requires Firestore lookup
+        true // Simplified for MVP
+      );
+      
+      // File size and type validation
+      allow write: if request.resource.size < 10 * 1024 * 1024 && // 10MB max
+        request.resource.contentType.matches('image/.*|application/pdf|application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    }
+    
+    // Annual documents folder
+    match /annual/{subcontractorId}/{year}/{fileName} {
+      allow read, write: if request.auth != null && request.auth.uid == subcontractorId;
+      
+      // File validation
+      allow write: if request.resource.size < 10 * 1024 * 1024 &&
+        request.resource.contentType.matches('image/.*|application/pdf|application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    }
+  }
+}

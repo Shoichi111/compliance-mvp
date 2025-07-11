@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Compliance Management Platform MVP
+
+A comprehensive safety compliance tracking system for construction projects, built with Next.js 14, Firebase, and TypeScript.
+
+## Features
+
+### Admin Portal
+- **User Management**: Create and manage advisors and subcontractors
+- **Project Management**: Create projects and assign users
+- **Analytics Dashboard**: Real-time compliance metrics and KPIs
+- **System Overview**: Monitor platform usage and performance
+
+### Advisor Portal
+- **Project Oversight**: View assigned projects and subcontractors
+- **Report Review**: Access and download monthly safety reports
+- **Document Management**: Review uploaded compliance documents
+- **Progress Tracking**: Monitor submission status and deadlines
+
+### Subcontractor Portal
+- **Monthly Reports**: Submit monthly safety metrics (11 required fields)
+- **Document Upload**: Upload required monthly documents (5 types)
+- **Annual Documents**: Manage annual compliance documents (18 types)
+- **Submission History**: Track past submissions and compliance status
+
+## Tech Stack
+
+- **Framework**: Next.js 14 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS + Shadcn/UI
+- **Authentication**: Firebase Auth
+- **Database**: Firebase Firestore
+- **Storage**: Firebase Storage
+- **Deployment**: Vercel
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js 18+ and npm
+- Firebase project configured
+- Vercel account (for deployment)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone and install dependencies**:
+   ```bash
+   cd compliance-mvp
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Configure environment variables**:
+   ```bash
+   cp .env.example .env.local
+   # Add your Firebase configuration
+   ```
 
-## Learn More
+3. **Start development server**:
+   ```bash
+   npm run dev
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. **Open http://localhost:3000**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Initial Setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Create Firebase project** with Authentication, Firestore, and Storage
+2. **Deploy security rules**: `firebase deploy --only firestore:rules`
+3. **Create admin account**: Visit `/setup-admin`
+4. **Configure users and projects** through admin portal
 
-## Deploy on Vercel
+## Demo Accounts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Admin:**
+- Email: `admin@demo.com`
+- Password: `Admin123!`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Advisor:**
+- Email: `alice@advisor.com`
+- Password: `Advisor123!`
+
+**Subcontractor:**
+- Email: `apex@construction.com`
+- Password: `Sub123!`
+
+## Deployment
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
+
+### Quick Deploy to Vercel
+
+1. **Build the project**:
+   ```bash
+   npm run build
+   ```
+
+2. **Deploy with Vercel CLI**:
+   ```bash
+   vercel
+   ```
+
+3. **Configure environment variables** in Vercel dashboard
+
+4. **Update Firebase authorized domains**

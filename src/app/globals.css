@@ -1,26 +1,180 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Construction-themed color palette */
+    --background: 248 250 252; /* slate-50 */
+    --foreground: 15 23 42; /* slate-800 */
+    --card: 255 255 255; /* white */
+    --card-foreground: 15 23 42; /* slate-800 */
+    --popover: 255 255 255;
+    --popover-foreground: 15 23 42;
+    --primary: 30 64 175; /* blue-700 - construction safety blue */
+    --primary-foreground: 248 250 252;
+    --secondary: 241 245 249; /* slate-100 */
+    --secondary-foreground: 30 41 59; /* slate-700 */
+    --muted: 241 245 249; /* slate-100 */
+    --muted-foreground: 100 116 139; /* slate-500 */
+    --accent: 59 130 246; /* blue-500 */
+    --accent-foreground: 255 255 255;
+    --destructive: 220 38 38; /* red-600 */
+    --destructive-foreground: 254 242 242;
+    --warning: 245 158 11; /* amber-500 */
+    --warning-foreground: 255 255 255;
+    --success: 34 197 94; /* green-500 */
+    --success-foreground: 255 255 255;
+    --border: 226 232 240; /* slate-200 */
+    --input: 226 232 240;
+    --ring: 59 130 246; /* blue-500 */
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 15 23 42; /* slate-800 */
+    --foreground: 248 250 252;
+    --card: 30 41 59; /* slate-700 */
+    --card-foreground: 248 250 252;
+    --popover: 30 41 59;
+    --popover-foreground: 248 250 252;
+    --primary: 59 130 246; /* blue-500 */
+    --primary-foreground: 15 23 42;
+    --secondary: 51 65 85; /* slate-600 */
+    --secondary-foreground: 248 250 252;
+    --muted: 51 65 85;
+    --muted-foreground: 148 163 184; /* slate-400 */
+    --accent: 99 102 241; /* indigo-500 */
+    --accent-foreground: 255 255 255;
+    --destructive: 239 68 68; /* red-500 */
+    --destructive-foreground: 255 255 255;
+    --warning: 251 191 36; /* amber-400 */
+    --warning-foreground: 15 23 42;
+    --success: 74 222 128; /* green-400 */
+    --success-foreground: 15 23 42;
+    --border: 51 65 85; /* slate-600 */
+    --input: 51 65 85;
+    --ring: 99 102 241;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    line-height: 1.6;
+  }
+
+  /* Enhanced typography */
+  h1 {
+    @apply text-3xl font-bold text-slate-900 dark:text-slate-100;
+  }
+  
+  h2 {
+    @apply text-2xl font-semibold text-slate-800 dark:text-slate-200;
+  }
+  
+  h3 {
+    @apply text-xl font-semibold text-slate-700 dark:text-slate-300;
+  }
+
+  /* Better form styling */
+  input, textarea, select {
+    @apply transition-all duration-200 focus:ring-2 focus:ring-primary/20;
+  }
+
+  /* Construction safety color utilities */
+  .text-safety-green {
+    @apply text-emerald-600 dark:text-emerald-400;
+  }
+  
+  .text-safety-yellow {
+    @apply text-amber-600 dark:text-amber-400;
+  }
+  
+  .text-safety-red {
+    @apply text-red-600 dark:text-red-400;
+  }
+
+  .bg-safety-green {
+    @apply bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800;
+  }
+  
+  .bg-safety-yellow {
+    @apply bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800;
+  }
+  
+  .bg-safety-red {
+    @apply bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800;
+  }
+
+  /* Page section styling */
+  .page-header {
+    @apply bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 rounded-lg shadow-lg mb-6;
+  }
+
+  .content-section {
+    @apply bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6 mb-6;
+  }
+
+  .sidebar-nav {
+    @apply bg-gradient-to-b from-slate-800 to-slate-900 text-white;
+  }
+
+  /* Enhanced card styling */
+  .metric-card {
+    @apply bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-6 transition-all duration-200 hover:shadow-xl hover:scale-105;
+  }
+
+  .status-card {
+    @apply rounded-lg p-4 border-l-4 shadow-sm;
+  }
+
+  .status-submitted {
+    @apply bg-green-50 dark:bg-green-900/20 border-l-green-500 text-green-800 dark:text-green-200;
+  }
+
+  .status-pending {
+    @apply bg-yellow-50 dark:bg-yellow-900/20 border-l-yellow-500 text-yellow-800 dark:text-yellow-200;
+  }
+
+  .status-overdue {
+    @apply bg-red-50 dark:bg-red-900/20 border-l-red-500 text-red-800 dark:text-red-200;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-100 dark:bg-slate-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 dark:bg-slate-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400 dark:bg-slate-500;
+}
+
+/* Loading animations */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 2s infinite;
+}
+
+/* Focus styles for accessibility */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background;
 }
