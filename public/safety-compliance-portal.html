@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safety Compliance Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --royal-blue: #1f5bff;
+      --slate-grey: #25313f;
+      --emerald-green: #1aaa7f;
+      --muted: #94a3b8;
+      --surface: #f7f8fb;
+      --card: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      color: var(--slate-grey);
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .badge {
+      background: rgba(31, 91, 255, 0.1);
+      color: var(--royal-blue);
+      border: 1px solid rgba(31, 91, 255, 0.2);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      color: var(--slate-grey);
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(31, 49, 72, 0.08);
+      border: 1px solid #e2e8f0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--slate-grey);
+    }
+
+    input, select, button {
+      font-family: inherit;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #d0d7e2;
+      background: #f8fafc;
+      transition: border 0.2s, box-shadow 0.2s;
+      color: var(--slate-grey);
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--royal-blue);
+      box-shadow: 0 0 0 3px rgba(31, 91, 255, 0.15);
+      background: #fff;
+    }
+
+    .primary-btn {
+      background: var(--royal-blue);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(31, 91, 255, 0.35);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.2s ease;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 20px rgba(31, 91, 255, 0.35);
+    }
+
+    .primary-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 0 12px;
+      color: var(--slate-grey);
+    }
+
+    .tabs {
+      display: inline-flex;
+      background: #e7ecf4;
+      padding: 6px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      gap: 6px;
+    }
+
+    .tab {
+      border: none;
+      background: transparent;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--muted);
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+
+    .tab.active {
+      background: var(--card);
+      color: var(--royal-blue);
+      box-shadow: 0 8px 16px rgba(37, 49, 63, 0.08);
+    }
+
+    .doc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .doc-card {
+      border: 1px solid #e2e8f0;
+      padding: 14px;
+      border-radius: 14px;
+      background: #f8fafc;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      transition: border 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+
+    .doc-card.uploaded {
+      background: rgba(26, 170, 127, 0.08);
+      border-color: rgba(26, 170, 127, 0.5);
+      box-shadow: 0 10px 18px rgba(26, 170, 127, 0.18);
+    }
+
+    .doc-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(31, 91, 255, 0.12);
+      display: grid;
+      place-items: center;
+      color: var(--royal-blue);
+      font-weight: 800;
+      flex-shrink: 0;
+      font-size: 18px;
+    }
+
+    .doc-card.uploaded .doc-icon {
+      background: rgba(26, 170, 127, 0.15);
+      color: var(--emerald-green);
+      content: '\2713';
+    }
+
+    .doc-body {
+      flex: 1;
+    }
+
+    .doc-title {
+      margin: 0 0 6px;
+      font-weight: 700;
+      color: var(--slate-grey);
+    }
+
+    .doc-desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .upload-btn {
+      border: 1px dashed #b8c4d9;
+      background: white;
+      color: var(--slate-grey);
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border 0.2s, color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+
+    .doc-card.uploaded .upload-btn {
+      background: var(--emerald-green);
+      border-style: solid;
+      border-color: transparent;
+      color: white;
+      box-shadow: 0 6px 16px rgba(26, 170, 127, 0.35);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .landing {
+      max-width: 520px;
+      margin: 80px auto 0;
+      text-align: center;
+    }
+
+    .landing .card {
+      padding: 28px;
+    }
+
+    .headline {
+      font-size: 24px;
+      margin: 0 0 10px;
+    }
+
+    .subtext {
+      margin: 0 0 20px;
+      color: var(--muted);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      padding: 14px 18px;
+      background: rgba(20, 24, 28, 0.92);
+      color: white;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      opacity: 0;
+      z-index: 10;
+      font-weight: 600;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .pill {
+      background: rgba(26, 170, 127, 0.15);
+      color: var(--emerald-green);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .section-stack {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (max-width: 640px) {
+      header { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section id="landing" class="landing">
+      <div class="card">
+        <p class="pill">Safety Compliance Portal</p>
+        <h2 class="headline">Select your active construction site</h2>
+        <p class="subtext">Choose a project to enter the portal and start submitting required safety documentation.</p>
+        <div class="grid">
+          <div>
+            <label for="projectSelect">Active Projects</label>
+            <select id="projectSelect">
+              <option value="" selected disabled>Choose a project</option>
+              <option>Project 101 - Downtown Condo Reno</option>
+              <option>Project 204 - Riverside Expansion</option>
+              <option>Project 310 - Lakeside Tower Retrofit</option>
+              <option>Project 488 - Midtown Mixed-Use</option>
+            </select>
+          </div>
+          <div style="display:flex;align-items:flex-end;">
+            <button id="enterPortal" class="primary-btn" style="width:100%;">Enter Portal</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dashboard" class="hidden">
+      <header>
+        <h1 id="projectTitle">Safety Compliance Portal</h1>
+        <span class="badge">Active Project</span>
+      </header>
+
+      <div class="section-stack">
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <p class="pill">Subcontractor</p>
+              <h3 style="margin:6px 0 0;">Subcontractor Information</h3>
+            </div>
+          </div>
+          <div class="grid">
+            <div>
+              <label for="companyName">Company Name</label>
+              <input id="companyName" type="text" placeholder="e.g., SteelSafe Contractors Ltd" />
+            </div>
+            <div>
+              <label for="contactPerson">Contact Person</label>
+              <input id="contactPerson" type="text" placeholder="Jane Doe" />
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input id="email" type="email" placeholder="safety@steelsafe.com" />
+            </div>
+            <div>
+              <label for="phone">Phone</label>
+              <input id="phone" type="tel" placeholder="(555) 123-4567" />
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <p class="pill">Document Uploads</p>
+              <h3 style="margin:6px 0 0;">Upload compliance documentation</h3>
+            </div>
+            <div class="tabs" role="tablist">
+              <button class="tab active" data-tab="company" role="tab">Company Documents</button>
+              <button class="tab" data-tab="worker" role="tab">Worker Training</button>
+            </div>
+          </div>
+
+          <div id="companyTab" class="tab-panel">
+            <div class="doc-grid">
+              <div class="doc-card" data-doc="wsib">
+                <div class="doc-icon">⧉</div>
+                <div class="doc-body">
+                  <p class="doc-title">WSIB Clearance</p>
+                  <p class="doc-desc">Upload current Workplace Safety and Insurance Board clearance certificate.</p>
+                </div>
+                <button class="upload-btn" data-type="company">Upload</button>
+              </div>
+              <div class="doc-card" data-doc="form1000">
+                <div class="doc-icon">⧉</div>
+                <div class="doc-body">
+                  <p class="doc-title">Form 1000</p>
+                  <p class="doc-desc">Provide the registered Form 1000 for this subcontractor.</p>
+                </div>
+                <button class="upload-btn" data-type="company">Upload</button>
+              </div>
+              <div class="doc-card" data-doc="liability">
+                <div class="doc-icon">⧉</div>
+                <div class="doc-body">
+                  <p class="doc-title">Liability Insurance</p>
+                  <p class="doc-desc">Proof of up-to-date general liability insurance coverage.</p>
+                </div>
+                <button class="upload-btn" data-type="company">Upload</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="workerTab" class="tab-panel hidden">
+            <div class="grid" style="margin-bottom:12px;">
+              <div>
+                <label for="workerName">Worker Name</label>
+                <input id="workerName" type="text" placeholder="e.g., John Smith" />
+              </div>
+            </div>
+            <div class="doc-grid">
+              <div class="doc-card" data-doc="heights">
+                <div class="doc-icon">⧉</div>
+                <div class="doc-body">
+                  <p class="doc-title">Working at Heights (CPO)</p>
+                  <p class="doc-desc">Upload valid CPO-approved Working at Heights certificate.</p>
+                </div>
+                <button class="upload-btn" data-type="worker">Upload</button>
+              </div>
+              <div class="doc-card" data-doc="whmis">
+                <div class="doc-icon">⧉</div>
+                <div class="doc-body">
+                  <p class="doc-title">WHMIS 2015</p>
+                  <p class="doc-desc">Most recent WHMIS 2015 training card for the named worker.</p>
+                </div>
+                <button class="upload-btn" data-type="worker">Upload</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="toast" class="toast" role="alert">⚠️ Please provide the required details before uploading.</div>
+
+  <script>
+    const landing = document.getElementById('landing');
+    const dashboard = document.getElementById('dashboard');
+    const projectSelect = document.getElementById('projectSelect');
+    const projectTitle = document.getElementById('projectTitle');
+    const enterBtn = document.getElementById('enterPortal');
+    const tabs = document.querySelectorAll('.tab');
+    const companyTab = document.getElementById('companyTab');
+    const workerTab = document.getElementById('workerTab');
+    const toast = document.getElementById('toast');
+
+    const companyNameInput = document.getElementById('companyName');
+    const workerNameInput = document.getElementById('workerName');
+
+    enterBtn.addEventListener('click', () => {
+      const selected = projectSelect.value;
+      if (!selected) {
+        showToast('Please select a project to continue.');
+        return;
+      }
+      projectTitle.textContent = selected;
+      landing.classList.add('hidden');
+      dashboard.classList.remove('hidden');
+    });
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const type = tab.dataset.tab;
+        if (type === 'company') {
+          companyTab.classList.remove('hidden');
+          workerTab.classList.add('hidden');
+        } else {
+          workerTab.classList.remove('hidden');
+          companyTab.classList.add('hidden');
+        }
+      });
+    });
+
+    function showToast(message) {
+      toast.textContent = `⚠️ ${message}`;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2800);
+    }
+
+    function handleUploadClick(button) {
+      const type = button.dataset.type;
+      const companyName = companyNameInput.value.trim();
+      const workerName = workerNameInput.value.trim();
+      if (!companyName) {
+        showToast('Please enter the Company Name before uploading.');
+        return;
+      }
+      if (type === 'worker' && !workerName) {
+        showToast('Please enter the Worker Name before uploading training records.');
+        return;
+      }
+
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = '.pdf,.jpg,.jpeg,.png,.doc,.docx';
+      fileInput.style.display = 'none';
+      fileInput.addEventListener('change', (event) => {
+        if (event.target.files.length > 0) {
+          const card = button.closest('.doc-card');
+          card.classList.add('uploaded');
+          const icon = card.querySelector('.doc-icon');
+          icon.textContent = '✓';
+          button.textContent = 'Uploaded';
+        }
+        fileInput.remove();
+      });
+      document.body.appendChild(fileInput);
+      fileInput.click();
+    }
+
+    document.querySelectorAll('.upload-btn').forEach(btn => {
+      btn.addEventListener('click', () => handleUploadClick(btn));
+    });
+  </script>
+</body>
+</html>
